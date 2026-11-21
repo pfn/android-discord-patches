@@ -868,6 +868,15 @@ def build():
     run("java", "-Xmx384m", "-cp", TOOLS / "r8.jar", "com.android.tools.r8.D8",
         "--release", "--min-api", "26", "--lib", TOOLS / "android.jar",
         "--classpath", stubs, "--output", compress_dex, compress_classes)
+    # Kotlin runtime shim: extension dexes reference kotlin.jvm.internal.* (Intrinsics, Ref boxes),
+    # which Discord 354.12+ obfuscates away. Rewrite those references to the app.venus.kshim
+    # runtime compiled into the i18n extension (Conduit settings always merges it), and fail the
+    # build if any Lkotlin/ reference survives.
+    rename_classes = BUILD / "rename-classes.jar"
+    run(compiler, "-cp", TOOLS / "morphe.jar", ROOT / "scripts/rename_dex.kt", "-d", rename_classes)
+    for name in ("voice", "font", "emoji", "i18n", "monet", "chat", "audio", "media", "diag", "compress"):
+        run("java", "-Xmx384m", "-cp", f"{rename_classes}:{TOOLS / 'morphe.jar'}",
+            "Rename_dexKt", BUILD / f"{name}-dex" / "classes.dex")
     check_languages()
     classes = BUILD / "classes.jar"
     sources = sorted((ROOT / "patches/src/main/kotlin").rglob("*.kt"))

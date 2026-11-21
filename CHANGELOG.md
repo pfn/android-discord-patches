@@ -1,3 +1,9 @@
+## [1.27.0](https://github.com/pfn/android-discord-patches/compare/v1.26.0...v1.27.0) (2026-11-21)
+
+### 🐛 Bug Fixes
+
+* **Discord:** Fixed launch crash on Discord 354.12 by shipping a kotlin runtime shim, so Conduit extensions no longer reference the kotlin.jvm.internal classes newer Discord obfuscates away
+
 ## [1.26.0](https://github.com/pfn/android-discord-patches/compare/v1.25.0...v1.26.0) (2026-11-21)
 
 ### 🚀 Updated App Support

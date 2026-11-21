@@ -324,7 +324,6 @@ function lazyCoreRuntime(code) {
     eagerFooter += ' var proto=Object.getPrototypeOf(d);out.pk=proto?Object.getOwnPropertyNames(proto).slice(0,25).join("|"):"none";}}catch(e){out.m4855="threw "+e;}';
     eagerFooter += ' try{var s=global.__r(12809);out.m12809=s?Object.keys(s).join("|"):"null";}catch(e){out.m12809="threw "+e;}';
     eagerFooter += ' try{out.core=(typeof $core==="function")?"ok":"missing";}catch(e){out.core="err "+e;}';
-    eagerFooter += ' throw new Error("VENUS-PROBE2 "+JSON.stringify(out));},15000);';
 
     const out = '(function(global){' + eagerHeader + eagerFooter + '})(globalThis);';
     checkEagerScope(acorn, out, stage2Items);

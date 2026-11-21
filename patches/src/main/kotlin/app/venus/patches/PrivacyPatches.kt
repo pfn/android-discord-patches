@@ -266,17 +266,6 @@ internal object NativePrivacy {
     )
 }
 
-@Suppress("unused")
-val disableAnalytics = rawResourcePatch(
-    name = "Disable analytics",
-    description = "Stops Discord's usage tracking and the analytics events it uploads. Always on once patched."
-) {
-    compatibleWith(discord)
-    section(PRIVACY)
-    dependsOn(passkeyErrorHint, packagedDiscordBundle)
-    execute { HbcPrivacy.apply(get("assets/index.android.bundle"), HbcPrivacy.analytics) }
-}
-
 private val crashTransport = rawResourcePatch {
     dependsOn(packagedDiscordBundle)
     execute { HbcPrivacy.apply(get("assets/index.android.bundle"), HbcPrivacy.crash) }
@@ -284,64 +273,4 @@ private val crashTransport = rawResourcePatch {
 private val telemetryProducers = rawResourcePatch {
     dependsOn(packagedDiscordBundle)
     execute { HbcPrivacy.apply(get("assets/index.android.bundle"), HbcPrivacy.telemetry) }
-}
-
-@Suppress("unused")
-val disableCrashReporting = bytecodePatch(
-    name = "Disable crash reporting",
-    description = "Stops crash reports, screenshots and system logs from being sent to Sentry. Always on once patched."
-) {
-    compatibleWith(discord)
-    section(PRIVACY)
-    dependsOn(passkeyErrorHint, crashTransport)
-    execute {
-        for (target in NativePrivacy.crash) target.install(Fingerprint(
-            definingClass = target.owner, name = target.name, parameters = target.parameters, returnType = target.returns
-        ).method)
-    }
-}
-
-@Suppress("unused")
-val disableTelemetry = bytecodePatch(
-    name = "Disable telemetry and touch logging",
-    description = "Stops performance tracking, per-screen smoothness stats and records of what you tap. Always on once patched."
-) {
-    compatibleWith(discord)
-    section(PRIVACY)
-    dependsOn(passkeyErrorHint, telemetryProducers)
-    execute {
-        for (target in NativePrivacy.telemetry) target.install(Fingerprint(
-            definingClass = target.owner, name = target.name, parameters = target.parameters, returnType = target.returns
-        ).method)
-    }
-}
-
-@Suppress("unused")
-val disableAttribution = bytecodePatch(
-    name = "Disable install attribution",
-    description = "Stops AppsFlyer from tracking how you installed the app. Some invite links that open before install may not work."
-) {
-    compatibleWith(discord)
-    section(PRIVACY)
-    dependsOn(passkeyErrorHint, discordBundleGuard)
-    execute {
-        for (target in NativePrivacy.attribution) target.install(Fingerprint(
-            definingClass = target.owner, name = target.name, parameters = target.parameters, returnType = target.returns
-        ).method)
-    }
-}
-
-@Suppress("unused")
-val disableAdvertisingIdentifiers = bytecodePatch(
-    name = "Disable advertising identifiers",
-    description = "Stops Discord and AppsFlyer from reading your Google advertising ID. Always on once patched."
-) {
-    compatibleWith(discord)
-    section(PRIVACY)
-    dependsOn(passkeyErrorHint, discordBundleGuard)
-    execute {
-        for (target in NativePrivacy.advertising) target.install(Fingerprint(
-            definingClass = target.owner, name = target.name, parameters = target.parameters, returnType = target.returns
-        ).method)
-    }
 }

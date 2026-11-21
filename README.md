@@ -3,7 +3,7 @@
 A private Morphe patch bundle for Discord: **Hide blocked or ignored messages** (Conduit, from
 lildanlid1/Cordly) plus **Hide gift button**, **Hide quest promo banner** and **Pin app to built-in
 bundle** (jrddupont/discord-patches). Vetted for **Discord 351.11 and 354.12 Stable** by actually
-patching both — all five patches apply with zero failures on 354.12.
+patching 354.12 — all five patches apply with zero failures.
 
 GPL-3.0, like both upstream repos; keep their attribution in `scripts/build.py` (bundle manifest).
 
@@ -20,8 +20,9 @@ java -jar work/tools/morphe-cli/morphe-desktop-*-all.jar patch \
   -o out/discord-patched.apk your-discord.apkm
 ```
 
-The 5 patches above are what this feed is for; the other Conduit feature patches are still in the
-bundle — select more any time. `--exclusive` keeps the run to your selection.
+The bundle contains exactly these 5 patches (Conduit settings is the hidden dependency of
+Hide blocked or ignored messages). To add more Conduit features later, copy the matching
+`bundledPlugin(...)` line back from lildanlid1/Cordly into DiscordPatches.kt.
 
 ## Push your feed
 
@@ -42,7 +43,11 @@ bundle — select more any time. `--exclusive` keeps the run to your selection.
 
    ```sh
    git tag v1.26.0 && git push origin v1.26.0
-   ```
+```
+
+4. Re-run the GitHub Actions workflow (or push again) so a `v1.26.0` release with
+   `patches-1.26.0.mpp` exists — `patches-bundle.json` points Manager at that release asset.
+```   ```
 
    Morphe Manager fetches `patches-list.json` from the repo's default branch, so main is enough;
    the tag is for your own bookkeeping. (Cordly's release.yml workflow is not included — this

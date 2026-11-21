@@ -340,178 +340,6 @@ val venusSettings = bytecodePatch(
 
 
 
-@Suppress("unused")
-val fileSizeOnPicker = rawResourcePatch(
-    name = "Show file sizes when attaching",
-    description = "Photos and videos in the picker show their size."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings)
-    execute { pickerSelected = true }
-}
-
-@Suppress("unused")
-val anonymousFileNames = bundledPlugin("anonFiles", "Anonymous file names",
-    "Files you send get a random name instead of the one on your phone. Based on Anonymous File Names by k1ng_op.")
-
-@Suppress("unused")
-val staffTags = bundledPlugin("staffTag", "Show owner and mod tags",
-    "Shows an Owner, Admin, Manager or Mod tag next to people's names in chat. Based on StaffTag by mwittrien.")
-
-@Suppress("unused")
-val removedConnectionAlerts = bundledPlugin("removedAlerts", "Alert when you're removed",
-    "Get a heads-up when a friend unfriends you, or a server kicks or bans you. Based on RemovedConnectionAlerts by iyu46.")
-
-@Suppress("unused")
-val fullQualityImages = bundledPlugin("fullImages", "Load full-quality images",
-    "Pictures in chat and full screen load as uploaded, not as Discord's smaller, compressed copy, and profile pictures stay sharp. Based on Uncompressed Discord Images by Knewest and HighResProfileImages by Kawtious.")
-
-@Suppress("unused")
-val alwaysTrust = bundledPlugin("alwaysTrust", "Always trust links and files",
-    "Opens links and files without Discord's \"Are you sure?\" warnings. Based on AlwaysTrust by zt and Trwy.")
-
-@Suppress("unused")
-val noConfirmPin = bundledPlugin("noConfirmPin", "Skip pin confirmation",
-    "Pins and unpins messages without asking first. Based on NoConfirmPin by Skamt.")
-
-@Suppress("unused")
-val clickableMentions = bundledPlugin("clickableMentions", "Tap mentions to open profiles",
-    "Tap an @mention in the message bar to see who it is. Based on ClickableMentions by mwittrien.")
-
-@Suppress("unused")
-val expandBar = bundledPlugin("expandBar", "Expand the message bar",
-    "Adds a button to the top right of the message bar that opens it up tall, so you can see much more of what you're typing.")
-
-@Suppress("unused")
-val silentLeave = bundledPlugin("silentLeave", "Leave group DMs silently",
-    "Leave group DMs without the \"left the group\" message. Based on SilentLeave by coder.gg.")
-
-@Suppress("unused")
-val silentEdit = bundledPlugin("silentEdit", "Edit without \"(edited)\"",
-    "Edit a message without the \"(edited)\" tag. Only works while your message is the latest one in the chat: Conduit sends the new text as a new message and deletes the old one. Older messages are edited the normal way.")
-
-@Suppress("unused")
-val silentDelete = bundledPlugin("silentDelete", "Delete without a trace",
-    "Blanks your message before deleting it, so message loggers on other clients keep nothing.")
-
-@Suppress("unused")
-val localEdit = bundledPlugin("localEdit", "Edit messages on this phone",
-    "Hold any message and change how it reads to you. Only you see the change.")
-
-@Suppress("unused")
-val hypeSquad = bundledPlugin("hypeSquad", "HypeSquad house",
-    "Join or leave a HypeSquad house (Bravery, Brilliance or Balance) from Conduit settings. Discord limits how often you can change house.")
-
-@Suppress("unused")
-val customIdle = bundledPlugin("customIdle", "Custom idle time",
-    "Choose how long Discord waits before setting you to Idle, or never. Discord's own time is 10 minutes.")
-
-@Suppress("unused")
-val mutualGroupDMs = bundledPlugin("mutualGroupDMs", "Mutual group DMs",
-    "Profiles show the group DMs you share with that person.")
-
-@Suppress("unused")
-val fastDeleteChannels = bundledPlugin("fastDeleteChannels", "Fast delete channels",
-    "Delete a channel without the confirmation, or hold it and tap Delete channel in its menu. Needs Manage Channels. There is no undo.")
-
-@Suppress("unused")
-val pauseInvites = bundledPlugin("pauseInvites", "Pause invites",
-    "Hold a server's icon to pause its invites until you resume them, to stop a raid. Needs Manage Server.")
-
-@Suppress("unused")
-val platformSpoof = bundledPlugin("platformSpoof", "Platform spoof",
-    "Show as desktop, web or console instead of mobile. Discord doesn't allow this and it could put your account at risk. Use at your own risk.")
-
-@Suppress("unused")
-val guildLurk = bundledPlugin("guildLurk", "Preview servers without joining",
-    "Open a server from its ID or invite link and read it without joining. Based on GuildLurk by fshin.")
-
-@Suppress("unused")
-val quietReplies = bundledPlugin("quietReplies", "Reply without pinging",
-    "Replies start with the ping off, so nobody gets pinged unless you turn it on.")
-
-@Suppress("unused")
-val viewRaw = bundledPlugin("viewRaw", "View raw data",
-    "Hold a message, channel, server, person or role to read its raw data as JSON and copy it. Email and phone number are left out.")
-
-@Suppress("unused")
-val showTimeoutDuration = bundledPlugin("timeoutDuration", "Show timeout duration",
-    "A tag next to timed-out people says how long until they can talk again. Based on ShowTimeoutDuration by Ven.")
-
-@Suppress("unused")
-val voiceDownload = bundledPlugin("voiceDownload", "Download voice messages",
-    "A Download button under each voice message saves it to your phone. Based on VoiceDownload by puv.")
-
-@Suppress("unused")
-val cloneExpressions = bundledPlugin("cloneExpressions", "Clone emojis and stickers",
-    "Tap a custom emoji or sticker in chat to add it to one of your servers. Based on ExpressionCloner by Ven.")
-
-@Suppress("unused")
-val dndBanners = bundledPlugin("dndBanners", "Banners in Do Not Disturb",
-    "New messages still pop up at the top while you're on Do Not Disturb, without a sound.")
-
-@Suppress("unused")
-val landscapeFull = bundledPlugin("landscapeFull", "Full-screen chat in landscape",
-    "Chat fills the screen sideways. Swipe from the left for servers and channels.")
-
-@Suppress("unused")
-val copyBios = rawResourcePatch(
-    name = "Copy profile bios",
-    description = "Hold a bio to select and copy it."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings)
-    execute { copyBiosSelected = true }
-}
-
-@Suppress("unused")
-val cleanChannels = bundledPlugin("cleanChannels", "Clean channel names",
-    "Removes emoji and symbols from channel names, and can show spaces instead of dashes.")
-
-@Suppress("unused")
-val favouriteAnything = rawResourcePatch(
-    name = "Favourite any image or video",
-    description = "Star any image or video to keep it in your GIF favourites."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings)
-    execute { favouriteAnythingSelected = true }
-}
-
-@Suppress("unused")
-val freeNitro = rawResourcePatch(
-    name = "Send Nitro stickers and emojis as links",
-    description = "Sends Nitro emojis and stickers as links that show as the image."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings)
-    execute { freeNitroSelected = true }
-}
-
-@Suppress("unused")
-val customVoiceMessages = bytecodePatch(
-    name = "Send audio as voice messages",
-    description = "Audio files are sent as voice messages. Android 10 or newer."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings)
-    extendWith("extensions/voice.mpe")
-    execute {
-        voiceSelected = true
-        voiceBridge(Fingerprint(
-            definingClass = FILE_MODULE,
-            name = "getSize",
-            returnType = "V",
-            parameters = listOf("Ljava/lang/String;", PROMISE)
-        ).method)
-    }
-}
-
 internal const val FILE_MODULE = "Lcom/discord/file_manager/FileModule;"
 internal const val PROMISE = "Lcom/facebook/react/bridge/Promise;"
 /** Instructions [voiceBridge] adds before Discord's own getSize code, counting the nop its label lands on. */
@@ -600,44 +428,6 @@ private fun bundledPlugin(key: String, title: String, summary: String) = rawReso
     execute { additionalSelections += key }
 }
 
-@Suppress("unused")
-val compressUploads = bytecodePatch(
-    name = "Compress big files",
-    description = "Photos, videos and audio over Discord's file size limit are made smaller to fit as you send them, instead of being refused."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings)
-    extendWith("extensions/compress.mpe")
-    execute {
-        additionalSelections += "compressUploads"
-        compressBridge(Fingerprint(
-            definingClass = FILE_MODULE,
-            name = "removeFile",
-            returnType = "V",
-            parameters = listOf("Ljava/lang/String;", "Ljava/lang/String;", PROMISE)
-        ).method)
-    }
-}
-
-@Suppress("unused")
-val noTyping = bundledPlugin("noTyping", "Hide typing indicator", "Others won't see when you're typing. You still see when they are.")
-
-@Suppress("unused")
-val fakeDeafen = bundledPlugin("fakeDeafen", "Fake deafen", "Look deafened in a call while you can still hear. Choose whether your mic stays muted.")
-
-@Suppress("unused")
-val quickDelete = bundledPlugin("quickDelete", "Skip delete confirmation", "Messages and link previews are removed right away, with no \"Are you sure?\". It can't be undone.")
-
-@Suppress("unused")
-val noDelete = bundledPlugin("noDelete", "Keep deleted messages", "Deleted messages stay in chat, outlined in red, and edited messages show what they said before. Can be kept after restarting.")
-
-@Suppress("unused")
-val jumpToTop = bundledPlugin("jumpToTop", "Jump to first message", "A button to go straight to the start of a chat, channel or thread.")
-
-@Suppress("unused")
-val hiddenChannels = bundledPlugin("hiddenChannels", "Show hidden channels", "Channels you can't open appear with a lock. Only their name and dates show, not messages.")
-
 internal const val REPLY_PREVIEW = "Lcom/discord/chat/presentation/message/MessageViewReplyPreview;"
 internal const val REPLY_BINDING = "Lcom/discord/chat/databinding/MessageViewReplyPreviewBinding;"
 internal const val BRIDGE_MESSAGE = "Lcom/discord/chat/bridge/Message;"
@@ -680,40 +470,6 @@ internal fun pastelReplyText(method: app.morphe.patcher.util.proxy.mutableTypes.
         nop
     """)
 }
-
-@Suppress("unused")
-val pastelize = bytecodePatch(
-    name = "Pastel name colors",
-    description = "Names without a role color get a soft pastel one."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings)
-    execute {
-        additionalSelections += "pastelize"
-        pastelReplyText(Fingerprint(
-            // The lambda's number changes between builds ($9 in 349.9, $2 in 350.8); its signature is unique.
-            definingClass = REPLY_PREVIEW,
-            returnType = "Lkotlin/Unit;",
-            parameters = listOf("Lcom/discord/chat/bridge/structurabletext/StructurableText;", REPLY_PREVIEW, BRIDGE_MESSAGE, "I")
-        ).method)
-    }
-}
-
-@Suppress("unused")
-val platformIndicators = bundledPlugin("platformIndicators", "Show device indicators", "Desktop, mobile, web, console or VR icons next to names, colored by status.")
-
-@Suppress("unused")
-val reviewDB = bundledPlugin("reviewDB", "User and server reviews", "Read and write reviews on profiles and servers, from the community ReviewDB service (manti.vendicated.dev).")
-
-@Suppress("unused")
-val readAll = bundledPlugin("readAll", "Read all button", "A button under Direct Messages that marks servers, DMs or both as read.")
-
-@Suppress("unused")
-val serverInfo = bundledPlugin("serverInfo", "Server info", "Hold a server's icon to see its details, boosts and friends there. Based on ServerInfo by fshin.")
-
-@Suppress("unused")
-val serverEdit = bundledPlugin("serverEdit", "Edit servers locally", "Give any server your own name and icon. Only you see them. Based on EditServers by mwittrien.")
 
 internal const val FONT_MANAGER = "Lcom/facebook/react/common/assets/ReactFontManager;"
 internal const val FONT_STYLE = "Lcom/facebook/react/common/assets/ReactFontManager\$TypefaceStyle;"
@@ -781,38 +537,6 @@ internal fun systemFontBridge(method: app.morphe.patcher.util.proxy.mutableTypes
     """)
 }
 
-@Suppress("unused")
-val forceSystemFont = bytecodePatch(
-    name = "Use your phone's font",
-    description = "Replaces Discord's font everywhere with your phone's or one you import. Android 9 or newer."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings)
-    extendWith("extensions/font.mpe")
-    execute {
-        additionalSelections += "systemFont"
-        useSystemFont(Fingerprint(
-            definingClass = FONT_MANAGER,
-            name = "getTypeface",
-            returnType = "Landroid/graphics/Typeface;",
-            parameters = listOf("Ljava/lang/String;", FONT_STYLE, "Landroid/content/res/AssetManager;")
-        ).method)
-        systemFontBridge(Fingerprint(
-            definingClass = FILE_MODULE,
-            name = "fileExists",
-            returnType = "V",
-            parameters = listOf("Ljava/lang/String;", PROMISE)
-        ).method)
-        readSystemFontSetting(Fingerprint(
-            definingClass = "Lcom/discord/MainApplication;",
-            name = "onCreate",
-            returnType = "V",
-            parameters = listOf()
-        ).method)
-    }
-}
-
 internal const val SURROGATES = "Lcom/discord/emoji/Surrogates;"
 internal const val SYSTEM_EMOJI = "Lapp/venus/emoji/SystemEmoji;"
 /** Instructions [useSystemEmoji] adds before Discord's own emoji picture lookup, counting the nop its label lands on. */
@@ -876,86 +600,6 @@ internal fun readSystemEmojiSetting(method: app.morphe.patcher.util.proxy.mutabl
     method.addInstructions(1, "invoke-static {p0}, $SYSTEM_EMOJI->init(Landroid/content/Context;)V")
 }
 
-@Suppress("unused")
-val forceSystemEmojis = bytecodePatch(
-    name = "Use your phone's emojis",
-    description = "In chat, reactions and the emoji picker, or from an emoji font you import."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings)
-    extendWith("extensions/emoji.mpe")
-    execute {
-        additionalSelections += "systemEmoji"
-        useSystemEmoji(Fingerprint(
-            definingClass = SURROGATES,
-            name = "toAssetUrl-impl",
-            returnType = "Ljava/lang/String;",
-            parameters = listOf("Ljava/lang/String;")
-        ).method)
-        systemEmojiBridge(Fingerprint(
-            definingClass = FILE_MODULE,
-            name = "getVideoDimensions",
-            returnType = "V",
-            parameters = listOf("Ljava/lang/String;", PROMISE)
-        ).method)
-        readSystemEmojiSetting(Fingerprint(
-            definingClass = "Lcom/discord/MainApplication;",
-            name = "onCreate",
-            returnType = "V",
-            parameters = listOf()
-        ).method)
-    }
-}
-
-@Suppress("unused")
-val messageGestures = bundledPlugin("gestures", "Double-tap to reply",
-    "Double-tap a message to reply, or your own to edit it. Triple-tap your own to delete it. Based on Geastures+ by kmmiio99o.")
-
-@Suppress("unused")
-val removeAnything = bundledPlugin("hideAnything", "Remove anything",
-    "Tap a button you never use to remove it, right where it is: turn on removal mode, then tap the red X on the voice message, attach, gift, call, video, search, Quests, Shop or Nitro buttons, the Quests banner, attach menu items, message menu rows and quick reactions, profile menu items, Settings rows and more. Bring them back any time in Conduit.")
-
-@Suppress("unused")
-val validUser = bundledPlugin("validUser", "Fix unknown mentions",
-    "@unknown-user mentions are looked up and show the person's name. Based on ValidUser by fshin, o.oer and kmmiio99o.")
-
-@Suppress("unused")
-val youBarSettings = bundledPlugin("youBarSettings", "Conduit button on profile bar",
-    "A shortcut to Conduit settings, next to the notifications bell.")
-
-@Suppress("unused")
-val bringBackTenorGifs = bundledPlugin("tenorGifs", "Bring back Tenor GIFs",
-    "Tenor GIFs show in Discord's GIF picker again, mixed with Discord's own or on their own. Inspired by BringBackTenor by Livie.")
-
-@Suppress("unused")
-val fixLinkPreviews = bundledPlugin("fixEmbeds", "Fix link previews",
-    "Links to X, Instagram, TikTok, Tumblr and more show the post. Links you send go through an embed service like FxTwitter, without tracking, and X and Bluesky posts can be translated. Inspired by FixEmbed by the ShiggyCord team.")
-
-@Suppress("unused")
-val splitLargeMessages = bundledPlugin("splitMessages", "Send long messages",
-    "Type past the character limit. Long messages are sent in parts, split between lines or words. Based on SplitLargeMessages by sunnie.")
-
-@Suppress("unused")
-val translateMessages = bundledPlugin("translate", "Translate messages",
-    "Messages in other languages show in yours. Their text is sent to Google Translate, without your account.")
-
-@Suppress("unused")
-val userActivityNotifications = bundledPlugin("userNotif", "User activity notifications",
-    "Shows a notice when chosen friends or users change status, start typing or send a message. Based on UserNotif by cywrx and coder.gg.")
-
-@Suppress("unused")
-val accountSwitcher = bundledPlugin("accountSwitcher", "Account switcher",
-    "Switch between multiple Discord accounts from the You tab, your profile bar or Settings.")
-
-@Suppress("unused")
-val unlockAppIcons = bundledPlugin("appIcons", "Unlock app icons",
-    "Use any Discord app icon in Settings without Nitro.")
-
-@Suppress("unused")
-val unlockNitroThemes = bundledPlugin("nitroThemes", "Unlock Nitro themes",
-    "Use Discord's gradient themes in Settings > Appearance without Nitro. Only this phone sees them.")
-
 /**
  * The native color swap both Material You colors and Custom themes use: Discord's Android views (the chat list, embeds,
  * the voice overlay, the window) draw with built-in theme colors JS can't reach, so JS sends a Discord color -> new color
@@ -987,22 +631,6 @@ private val nativeThemeColors = bytecodePatch {
         ).method)
     }
 }
-
-@Suppress("unused")
-val customThemes = bytecodePatch(
-    name = "Custom themes",
-    description = "Install color themes from a link and switch between them. Works with Revenge and Vendetta themes."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    // Themes recolor Discord's native chat list and embeds too, through the same color swap as Material You colors.
-    dependsOn(venusSettings, nativeThemeColors)
-    execute { additionalSelections += "customThemes" }
-}
-
-@Suppress("unused")
-val iconPacks = bundledPlugin("iconPacks", "Icon packs",
-    "Replace Discord's icons with community icon packs or a custom icon pack link. Works with Themes+ icon packs.")
 
 internal const val HIGHLIGHT_DRAWER = "Lcom/discord/chat/presentation/message/decorations/HighlightedMessageDrawer;"
 internal const val CHAT_R_DIMEN = "Lcom/discord/chat/R\$dimen;"
@@ -1071,29 +699,6 @@ internal fun scaleMessageGutterWidth(method: app.morphe.patcher.util.proxy.mutab
     """)
 }
 
-@Suppress("unused")
-val messageHighlights = bytecodePatch(
-    name = "Message highlights",
-    description = "Pick bar width and colors for replies, mentions and deleted messages."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings)
-    extendWith("extensions/chat.mpe")
-    execute {
-        additionalSelections += "messageHighlight"
-        if (!messageGutterGuarded) {
-            messageGutterGuarded = true
-            scaleMessageGutterWidth(Fingerprint(
-                definingClass = HIGHLIGHT_DRAWER,
-                name = "drawHighlight",
-                returnType = "V",
-                parameters = listOf("Landroid/graphics/Canvas;", "Landroid/view/View;", "I", "I")
-            ).method)
-        }
-    }
-}
-
 internal const val USER_AGENT_INTERCEPTOR = "Lcom/discord/client_info/ClientUserAgent\$DiscordUserAgentInterceptor;"
 /** The start of the Windows desktop User-Agent that Quest Completer sends Play and Activity heartbeats with. */
 internal const val QUEST_DESKTOP_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) discord/"
@@ -1127,51 +732,6 @@ internal fun keepDesktopQuestAgent(method: app.morphe.patcher.util.proxy.mutable
         :venus_android_agent
         nop
     """)
-}
-
-@Suppress("unused")
-val questCompleter = bytecodePatch(
-    name = "Complete Quests automatically",
-    description = "Finishes video, Play and Activity Quests in the background. Discord may pause Quests on accounts that do this."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings)
-    execute {
-        additionalSelections += "quests"
-        // Play and Activity time only counts when it comes from the desktop app.
-        if (!questAgentGuarded) {
-            questAgentGuarded = true
-            keepDesktopQuestAgent(Fingerprint(
-                definingClass = USER_AGENT_INTERCEPTOR,
-                name = "intercept",
-                returnType = "Lokhttp3/Response;",
-                parameters = listOf("Lokhttp3/Interceptor\$Chain;")
-            ).method)
-        }
-    }
-}
-
-@Suppress("unused")
-val badgeCompleter = bytecodePatch(
-    name = "Complete badges automatically",
-    description = "Plays real PC games in the background, up to 3 at once, toward your Hours Played and Unique Games Played badges."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings)
-    execute {
-        additionalSelections += "badges"
-        if (!questAgentGuarded) {
-            questAgentGuarded = true
-            keepDesktopQuestAgent(Fingerprint(
-                definingClass = USER_AGENT_INTERCEPTOR,
-                name = "intercept",
-                returnType = "Lokhttp3/Response;",
-                parameters = listOf("Lokhttp3/Interceptor\$Chain;")
-            ).method)
-        }
-    }
 }
 
 internal const val SYSTEM_COLORS = "Lapp/venus/monet/SystemColors;"
@@ -1276,48 +836,6 @@ internal fun readMaterialYouColors(method: app.morphe.patcher.util.proxy.mutable
     method.addInstructions(1, "invoke-static {p0}, $SYSTEM_COLORS->init(Landroid/content/Context;)V")
 }
 
-@Suppress("unused")
-val materialYou = bytecodePatch(
-    name = "Material You colors",
-    description = "Colors Discord to match your wallpaper, in light and dark. Wallpaper colors need Android 12 or newer."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings, nativeThemeColors)
-    execute { additionalSelections += "materialYou" }
-}
-
-@Suppress("unused")
-val hideBlockedMessages = bundledPlugin("hideBlocked", "Hide blocked or ignored messages",
-    "Removes the \"blocked messages\" and \"ignored messages\" rows from chat, and can hide replies to them too. From Rain.")
-
-@Suppress("unused")
-val unlockExperiments = bundledPlugin("experiments", "Unlock Discord experiments",
-    "Adds Dev Tools to Settings, to try features Discord is still testing. Only on this phone. Based on Experiments by maisy.")
-
-@Suppress("unused")
-val bulkDelete = bytecodePatch(
-    name = "Bulk delete messages",
-    description = "Select multiple messages and delete them all at once, in one chat or across channels, servers and DMs."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings)
-    extendWith("extensions/chat.mpe")
-    execute {
-        additionalSelections += "bulkDelete"
-        if (!messageGutterGuarded) {
-            messageGutterGuarded = true
-            scaleMessageGutterWidth(Fingerprint(
-                definingClass = HIGHLIGHT_DRAWER,
-                name = "drawHighlight",
-                returnType = "V",
-                parameters = listOf("Landroid/graphics/Canvas;", "Landroid/view/View;", "I", "I")
-            ).method)
-        }
-    }
-}
-
 internal const val HANDSFREE = "Lapp/venus/audio/Handsfree;"
 internal const val AUDIO_MANAGER = "Landroid/media/AudioManager;"
 
@@ -1376,36 +894,5 @@ internal fun readHandsfreeContext(method: app.morphe.patcher.util.proxy.mutableT
 }
 
 @Suppress("unused")
-val voiceChannelOptions = bundledPlugin("voiceOptions", "Voice channel options",
-    "Choose the volume, audio output and sounds for voice channels.")
-
-@Suppress("unused")
-val listenAlong = bundledPlugin("listenAlong", "Listen along",
-    "Play what a friend is listening to on Spotify, from their profile. Needs Spotify Premium.")
-
-@Suppress("unused")
-val keepBluetoothAudioClear = bytecodePatch(
-    name = "Keep Bluetooth audio clear in calls",
-    description = "Headphones stay in music quality in calls. Your phone's mic picks up your voice."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings)
-    extendWith("extensions/audio.mpe")
-    execute {
-        additionalSelections += "noHandsfree"
-        for (site in HANDSFREE_SITES) {
-            val method = Fingerprint(definingClass = site.owner, name = site.name, parameters = site.parameters).method
-            val count = keepBluetoothA2dp(method)
-            if (count != site.calls) throw PatchException("${site.owner}->${site.name}: $count hands-free calls, expected ${site.calls}")
-        }
-        readHandsfreeContext(Fingerprint(
-            definingClass = "Lcom/discord/MainApplication;",
-            name = "onCreate",
-            returnType = "V",
-            parameters = listOf()
-        ).method)
-    }
-}
-
-val customRichPresence = bundledPlugin("customRPC", "Rich Presence", "Publish a custom activity with images, details and elapsed time.")
+val hideBlockedMessages = bundledPlugin("hideBlocked", "Hide blocked or ignored messages",
+    "Removes the \"blocked messages\" and \"ignored messages\" rows from chat, and can hide replies to them too. From Rain.")

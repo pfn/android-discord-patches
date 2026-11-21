@@ -61,7 +61,6 @@ fun main(args: Array<String>) {
     }
     check(HbcPrivacy.resolvedEmptyObject.size == 23 && HbcPrivacy.resolvedEmptyObject[14].toInt() == HbcPrivacy.OP_NEW_OBJECT)
     check(HbcPrivacy.returnUndefined.contentEquals(byteArrayOf(147.toByte(), 6, 118, 6)))
-    val privacy = listOf(disableAnalytics, disableCrashReporting, disableTelemetry, disableAttribution, disableAdvertisingIdentifiers)
     fun graph(selected: List<Patch<*>>): List<Patch<*>> {
         val visited = linkedSetOf<Patch<*>>()
         val active = mutableSetOf<Patch<*>>()
@@ -75,18 +74,11 @@ fun main(args: Array<String>) {
         selected.forEach { visit(it) }
         return visited.toList()
     }
-    for (selection in 0..31) for (withSettings in listOf(false, true)) {
-        val selected = privacy.filterIndexed { i, _ -> selection and (1 shl i) != 0 }
-        val ordered = graph(selected + if (withSettings) listOf(venusSettings) else emptyList())
-        val needsLoader = withSettings || selected.any { it in privacy.take(3) }
-        check(ordered.count { it === packagedDiscordBundle } == if (needsLoader) 1 else 0)
-        if (!withSettings) check(venusSettings !in ordered)
-        // Any selection gets the passkey hint, exactly once.
-        check(ordered.count { it === passkeyErrorHint } == if (selected.isNotEmpty() || withSettings) 1 else 0)
-        check(ordered.count { it === discordBundleGuard } == if (selected.isNotEmpty() || withSettings) 1 else 0)
-        for ((i, patch) in ordered.withIndex()) check(patch.dependencies.all { ordered.indexOf(it) < i })
-    }
-    check(privacy.all { it.default && it.options.values.isEmpty() })
+    val ordered = graph(listOf(venusSettings))
+    check(ordered.count { it === packagedDiscordBundle } == 1)
+    check(ordered.count { it === passkeyErrorHint } == 1)
+    check(ordered.count { it === discordBundleGuard } == 1)
+    for ((i, patch) in ordered.withIndex()) check(patch.dependencies.all { ordered.indexOf(it) < i })
     if (args.isEmpty()) {
         // CI can validate output against the same digests without distributing proprietary APK content.
         println("PASS: privacy target/stub definitions; set VENUS_ORIGINAL_APK for read-only APK ABI validation")

@@ -316,14 +316,6 @@ function lazyCoreRuntime(code) {
 
     let eagerFooter = ddSrc + items[hdIdx].src + items[dvIdx].src + items[exIdx].src + items[exIdx + 1].src;
     eagerFooter += 'global.__venusPatches=Object.freeze({revision:revision,settings:settings,features:features,status:status,setSetting:function(k,v){return $core().setSetting(k,v)},formatSize:function(b){return $core().formatSize(b)},getSize:function(u){return $core().getSize(u)}});';
-    eagerFooter += 'setTimeout(function(){';
-    eagerFooter += ' var out={d:typeof global.__d,r:typeof global.__r};';
-    eagerFooter += ' try{var m=global.__r(4855);out.m4855=m?Object.keys(m).join("|"):"null";';
-    eagerFooter += ' var d=m&&m.default;out.d4855=d?typeof d:"null";';
-    eagerFooter += ' if(d){out.k=Object.keys(d).slice(0,25).join("|");out.iif=typeof d.isIgnoredForMessage;out.ii=typeof d.isIgnored;';
-    eagerFooter += ' var proto=Object.getPrototypeOf(d);out.pk=proto?Object.getOwnPropertyNames(proto).slice(0,25).join("|"):"none";}}catch(e){out.m4855="threw "+e;}';
-    eagerFooter += ' try{var s=global.__r(12809);out.m12809=s?Object.keys(s).join("|"):"null";}catch(e){out.m12809="threw "+e;}';
-    eagerFooter += ' try{out.core=(typeof $core==="function")?"ok":"missing";}catch(e){out.core="err "+e;}';
 
     const out = '(function(global){' + eagerHeader + eagerFooter + '})(globalThis);';
     checkEagerScope(acorn, out, stage2Items);

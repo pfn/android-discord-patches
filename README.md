@@ -55,6 +55,9 @@ Hide blocked or ignored messages). To add more Conduit features later, copy the 
 
 ## Subscribe on your phone
 
+[![Add to Morphe](.github/assets/add-to-morphe.svg)](https://morphe.software/add-source?github=pfn/android-discord-patches)
+
+
 In Morphe Manager: **Settings → Patch sources → add source**, enter
 `https://github.com/yourname/my-discord-patches` — or open this deep link on the phone:
 

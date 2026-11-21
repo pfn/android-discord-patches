@@ -300,7 +300,8 @@ internal object HbcPrelude {
             val end = prefix.size()
             emit(175); u32(7) // normal path skips Catch and falls into the original global code
             val handler = prefix.size()
-            emit(119, 14) // Catch: fail open to Discord if local prelude evaluation fails
+            emit(119, 14) // Catch: rethrow instead of failing open (354.12 diagnosis): make prelude failures fatal and visible
+            emit(121, 14) // Throw r14
             emit(147, 15); emit(147, 16) // LoadConstUndefined r15, r16 on both paths: the original global starts clean
             val prelude = prefix.toByteArray()
             // The only real ceiling: the relocated global function and the file must stay 32-bit addressable.

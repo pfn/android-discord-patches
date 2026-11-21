@@ -19327,31 +19327,41 @@
     // (12809) walks, before Discord groups messages or builds BLOCKED_GROUP / IGNORED_GROUP rows. MessageStore itself is
     // untouched, adjacent messages around a hidden one join into one group, and toggling an option redraws the open chat.
     const hideBlocked = {relationships:null, references:null, version:0, dispatcher:null};
-    function hideBlockedAuthorBlocked(msg) {
+        function hideBlockedAuthorBlocked(msg) {
         if (!msg || typeof msg !== "object") return false;
         if (msg.blocked === true) return true;
         const rel = hideBlockedRelationships();
         if (!rel) return false;
+        const authorId = msg.author && msg.author.id || msg.authorId;
         try {
-            if (typeof rel.isBlockedForMessage === "function") return !!rel.isBlockedForMessage(msg);
-            const authorId = msg.author && msg.author.id || msg.authorId;
-            if (authorId && typeof rel.isBlocked === "function") return !!rel.isBlocked(authorId);
+            if (hideBlocked.blockedFn && rel[hideBlocked.blockedFn](authorId) === true) return true;
+            if (hideBlocked.blockedFn && rel[hideBlocked.blockedFn](msg) === true) return true;
         } catch (_) {}
         return false;
     }
-    // 354.12 may renumber the store: probe nearby ids for the shape, not just the pinned id.
     function hideBlockedRelationships() {
-        if (hideBlocked.relationships) return hideBlocked.relationships;
-        const rel = inspectedExport(4855, "default");
-        if (rel && typeof rel.isIgnoredForMessage === "function") return (hideBlocked.relationships = rel);
+        if (hideBlocked.relationships !== undefined) return hideBlocked.relationships;
+        hideBlocked.relationships = null;
         if (typeof global.__r !== "function") return null;
-        for (let id = 4800; id <= 4950; id++) {
-            try {
-                const m = global.__r(id);
-                const d = m && m.default;
-                if (d && typeof d === "object" && typeof d.isIgnoredForMessage === "function")
-                    return (hideBlocked.relationships = d);
-            } catch (_) {}
+        const candidates = [4855];
+        for (let ring = 1; ring <= 8; ring++) { candidates.push(4855 - ring * 40, 4855 + ring * 40); }
+        for (const id of candidates) {
+            let m; try { m = global.__r(id); } catch (_) { continue; }
+            if (!m || typeof m !== "object") continue;
+            for (const exportKey of Object.keys(m)) {
+                const d = m[exportKey];
+                if (!d || (typeof d !== "object" && typeof d !== "function")) continue;
+                let ignoredFn = null, blockedFn = null;
+                // Store methods may live on the prototype (class instances): walk the chain.
+                for (let o = d; o && o !== Object.prototype; o = Object.getPrototypeOf(o)) {
+                    for (const k of Object.getOwnPropertyNames(o)) {
+                        if (typeof d[k] !== "function") continue;
+                        if (/gnored|idden/i.test(k)) ignoredFn = k;
+                        if (/blocked/i.test(k)) blockedFn = k;
+                    }
+                }
+                if (ignoredFn) { hideBlocked.relationships = d; hideBlocked.ignoredFn = ignoredFn; hideBlocked.blockedFn = blockedFn; return d; }
+            }
         }
         return null;
     }
@@ -19359,15 +19369,15 @@
         if (!msg || typeof msg !== "object") return false;
         if (msg.ignored === true) return true;
         const rel = hideBlockedRelationships();
-        if (!rel) return false;
+        if (!rel || !hideBlocked.ignoredFn) return false;
+        const authorId = msg.author && msg.author.id || msg.authorId;
         try {
-            if (typeof rel.isIgnoredForMessage === "function") return !!rel.isIgnoredForMessage(msg);
-            const authorId = msg.author && msg.author.id || msg.authorId;
-            if (authorId && typeof rel.isIgnored === "function") return !!rel.isIgnored(authorId);
+            if (rel[hideBlocked.ignoredFn](authorId) === true) return true;
+            if (rel[hideBlocked.ignoredFn](msg) === true) return true;
         } catch (_) {}
         return false;
     }
-    function hideBlockedReferencedMessage(msg) {
+function hideBlockedReferencedMessage(msg) {
         if (!msg || typeof msg !== "object") return null;
         const direct = msg.referencedMessage || msg.referenced_message;
         if (direct && typeof direct === "object") return direct.message && typeof direct.message === "object" ? direct.message : direct;
@@ -19419,6 +19429,22 @@
         if (!active || !messages || typeof messages.forEach !== "function") {
             if (!force) return orig.call(self, params);
             return orig.call(self, Object.assign({}, params, {forceRender:true}));
+        }
+        // DIAGNOSTIC: render-phase throw -> fatal -> Conduit crash report shows the data.
+        if (!global.__venusProbed) {
+            global.__venusProbed = true;
+            const probe = messages[0] || {};
+            const flags = {};
+            for (const mm of messages) {
+                if (!mm || typeof mm !== "object") continue;
+                for (const kk of Object.keys(mm)) {
+                    if (/gnor|block|idden/i.test(kk)) { try { flags[kk] = mm[kk]; } catch (_) {} }
+                }
+            }
+            throw new Error("VENUS-PROBE n=" + messages.length +
+                " keys=" + Object.keys(probe).join("|") +
+                " author=" + (probe.author ? JSON.stringify(probe.author).slice(0, 120) : String(probe.author)) +
+                " flags=" + JSON.stringify(flags).slice(0, 300));
         }
         const wrapped = Object.create(messages);
         wrapped.forEach = function (fn, thisArg) {

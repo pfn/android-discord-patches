@@ -127,12 +127,18 @@ internal val packagedDiscordBundle = bytecodePatch {
                 parameters = listOf("I", "Lkotlin/jvm/functions/Function0;")
             ).method)
         } else {
-            val setup = mutableClassDefBy { clazz ->
-                clazz.methods.any { it.referencesLoaderChoice() }
+            // 354.12 has two loader-selection sites with the same shape (dl/p and d6/a); patch each.
+            val patched = mutableSetOf<String>()
+            while (true) {
+                val clazz = mutableClassDefByOrNull { c ->
+                    c.type !in patched && c.methods.any { it.referencesLoaderChoice() }
+                } ?: break
+                val method = clazz.methods.singleOrNull { it.referencesLoaderChoice() }
+                    ?: throw PatchException("React bundle setup method no longer matches its 354.12 shape")
+                pinPackagedDiscordBundle354(method)
+                patched.add(clazz.type)
             }
-            val method = setup.methods.singleOrNull { it.referencesLoaderChoice() }
-                ?: throw PatchException("React bundle setup method no longer matches its 354.12 shape")
-            pinPackagedDiscordBundle354(method)
+            if (patched.isEmpty()) throw PatchException("No React bundle setup method found for 354.12")
         }
     }
 }
@@ -191,7 +197,8 @@ internal fun pinPackagedDiscordBundle(method: app.morphe.patcher.util.proxy.muta
  */
 internal fun pinPackagedDiscordBundle354(method: app.morphe.patcher.util.proxy.mutableTypes.MutableMethod) {
     val implementation = method.implementation ?: throw PatchException("React bundle setup has no code")
-    val reads = implementation.instructions.withIndex().filter { (_, instruction) ->
+    val instructions = implementation.instructions
+    val reads = instructions.withIndex().filter { (_, instruction) ->
         instruction.opcode == com.android.tools.smali.dexlib2.Opcode.IGET_OBJECT &&
             (instruction as? com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction)
                 ?.reference?.let { it as? com.android.tools.smali.dexlib2.iface.reference.FieldReference }
@@ -200,8 +207,22 @@ internal fun pinPackagedDiscordBundle354(method: app.morphe.patcher.util.proxy.m
     if (reads.size != 1) throw PatchException("React bundle setup: ${reads.size} OTA file reads, expected exactly 1")
     val (index, read) = reads[0]
     val register = (read as com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction).registerA
-    method.replaceInstruction(index, "const/16 v$register, 0x0")
-    println("Conduit: OTA bundle read nulled in React setup; Discord's packaged-bundle branch always wins")
+    // Two shapes ship the same logic. dl/p null-checks the resulting path, so nulling the file
+    // read is safe. d6/a dereferences file.absolutePath unconditionally and only null-checks the
+    // path later (falling back to the asset loader), so there the path result must be nulled.
+    val next = instructions.getOrNull(index + 1)
+    val nextRef = (next as? com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction)?.reference?.toString()
+    if (nextRef == "Ljava/io/File;->getAbsolutePath()Ljava/lang/String;") {
+        val move = instructions.getOrNull(index + 2)
+        if (move == null || move.opcode != com.android.tools.smali.dexlib2.Opcode.MOVE_RESULT_OBJECT)
+            throw PatchException("React bundle setup: file path result not found after getAbsolutePath")
+        val dest = (move as com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction).registerA
+        method.replaceInstruction(index + 2, "const/4 v$dest, 0x0")
+        println("Conduit: OTA bundle path nulled in React setup; Discord's packaged-bundle branch always wins")
+    } else {
+        method.replaceInstruction(index, "const/16 v$register, 0x0")
+        println("Conduit: OTA bundle read nulled in React setup; Discord's packaged-bundle branch always wins")
+    }
 }
 
 private fun com.android.tools.smali.dexlib2.iface.Method.referencesLoaderChoice(): Boolean {
@@ -896,3 +917,6 @@ internal fun readHandsfreeContext(method: app.morphe.patcher.util.proxy.mutableT
 @Suppress("unused")
 val hideBlockedMessages = bundledPlugin("hideBlocked", "Hide blocked or ignored messages",
     "Removes the \"blocked messages\" and \"ignored messages\" rows from chat, and can hide replies to them too. From Rain.")
+@Suppress("unused")
+val youBarSettings = bundledPlugin("youBarSettings", "Conduit button on profile bar",
+    "A shortcut to Conduit settings, next to the notifications bell.")

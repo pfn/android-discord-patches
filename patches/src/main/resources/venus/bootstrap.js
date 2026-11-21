@@ -8697,6 +8697,8 @@
             if (debugLog.missing.has(name) || debugLog.missing.size >= 300) return;
             debugLog.missing.add(name);
             dlog("D", "hooks", "module " + name + ": " + (typeof why === "string" ? why : "threw " + dlogText(why)));
+            // Mirror to logcat so a broken settings UI can't trap the diagnostics (354.12).
+            try { if (global.console && typeof global.console.warn === "function") global.console.warn("[Conduit][missing] " + name + ": " + (typeof why === "string" ? why : "threw " + dlogText(why))); } catch (_) {}
         } catch (_) {}
     }
     const PLATFORM_COLORS = {online:"#23a55a",idle:"#f0b232",dnd:"#f23f43"};
@@ -19328,7 +19330,7 @@
     function hideBlockedAuthorBlocked(msg) {
         if (!msg || typeof msg !== "object") return false;
         if (msg.blocked === true) return true;
-        const rel = hideBlocked.relationships || (hideBlocked.relationships = inspectedExport(4855, "default"));
+        const rel = hideBlockedRelationships();
         if (!rel) return false;
         try {
             if (typeof rel.isBlockedForMessage === "function") return !!rel.isBlockedForMessage(msg);
@@ -19337,10 +19339,26 @@
         } catch (_) {}
         return false;
     }
+    // 354.12 may renumber the store: probe nearby ids for the shape, not just the pinned id.
+    function hideBlockedRelationships() {
+        if (hideBlocked.relationships) return hideBlocked.relationships;
+        const rel = inspectedExport(4855, "default");
+        if (rel && typeof rel.isIgnoredForMessage === "function") return (hideBlocked.relationships = rel);
+        if (typeof global.__r !== "function") return null;
+        for (let id = 4800; id <= 4950; id++) {
+            try {
+                const m = global.__r(id);
+                const d = m && m.default;
+                if (d && typeof d === "object" && typeof d.isIgnoredForMessage === "function")
+                    return (hideBlocked.relationships = d);
+            } catch (_) {}
+        }
+        return null;
+    }
     function hideBlockedAuthorIgnored(msg) {
         if (!msg || typeof msg !== "object") return false;
         if (msg.ignored === true) return true;
-        const rel = hideBlocked.relationships || (hideBlocked.relationships = inspectedExport(4855, "default"));
+        const rel = hideBlockedRelationships();
         if (!rel) return false;
         try {
             if (typeof rel.isIgnoredForMessage === "function") return !!rel.isIgnoredForMessage(msg);
@@ -23813,6 +23831,16 @@
     const INSTRUMENTED_MODULES = new Set([17, 19, 414, 1164, 1297, 8023, 8026]);
     function activateModule(id, module) {
         try { debugLog.hooked.add(id); } catch (_) {}
+        // Diagnostics mirror for broken-UI situations: once startup has hooked most modules, wait a
+        // beat and name every feature target module that was never defined on this Discord build.
+        if (!global.__venusSummaryQueued && debugLog.hooked.size > 50) {
+            global.__venusSummaryQueued = true;
+            setTimeout(function () {
+                const missing = [];
+                for (const id2 in targetModules) if (!debugLog.hooked.has(Number(id2))) missing.push(id2);
+                throw new Error("CONDUIT-DEBUG hooked=" + debugLog.hooked.size + " targets-missing=" + missing.join(","));
+            }, 20000);
+        }
         try {
             if (id === 1164) {
                 const nativeFiles = module.exports.default;
@@ -23877,6 +23905,7 @@
                             environmentReady = true;
                             for (const [pendingId, pending] of deferred) activateModule(pendingId, pending);
                             deferred.clear();
+
                             return value;
                         };
                     } else if (!environmentReady) deferred.set(id, module);

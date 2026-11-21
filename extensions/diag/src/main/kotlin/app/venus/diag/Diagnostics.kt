@@ -892,6 +892,7 @@ object Diagnostics {
         val c = app
         if (c == null) { promise.reject("VENUS_DIAG", "Not ready"); return true }
         when (action) {
+            "log" -> { android.util.Log.i("ConduitDiag", argument ?: ""); promise.resolve("") }
             "report" -> Thread(object : Runnable { override fun run() {
                 try { promise.resolve(troubleshootingReport()) } catch (error: Throwable) { promise.reject("VENUS_DIAG", error.toString()) }
             } }, "venus-report").start()

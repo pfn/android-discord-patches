@@ -1,6 +1,6 @@
 {
   "created_at": "2026-11-21T08:11:29",
-  "description": "### \ud83d\ude80 Updated App Support\n\n* **Discord:** Add support for `354.12 - Stable`\n\n### \u2728 New Features\n\n* **Discord:** Personal feed: Conduit (Hide blocked or ignored messages) with jrddupont's Hide gift button, Hide quest promo banner and Pin app to built-in bundle\n",
+  "description": "### \ud83d\ude80 Updated App Support\n\n* **Discord:** Add support for `354.12 - Stable`\n\n### \u2728 New Features\n\n* **Discord:** Personal feed bundling Conduit (Hide blocked or ignored messages) with jrddupont's Hide gift button, Hide quest promo banner and Pin app to built-in bundle\n",
   "download_url": "https://github.com/pfn/android-discord-patches/releases/download/v1.26.0/patches-1.26.0.mpp",
   "page_url": "https://github.com/pfn/android-discord-patches/releases/tag/v1.26.0",
   "signature_download_url": "",

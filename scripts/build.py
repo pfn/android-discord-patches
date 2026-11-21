@@ -982,7 +982,7 @@ def check_metadata(metadata):
     # Morphe Manager parses created_at as a kotlinx LocalDateTime: no UTC offset or "Z".
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{1,9})?)?", metadata["created_at"]):
         raise SystemExit("patches-bundle.json: created_at must be a LocalDateTime without a UTC offset")
-    if not metadata["download_url"].startswith("https://github.com/lildanlid1/Cordly/releases/download/"):
+    if not metadata["download_url"].startswith("https://github.com/pfn/android-discord-patches/releases/download/"):
         raise SystemExit("patches-bundle.json: unexpected download_url")
     # The fallback release notes must split into Morphe's sections, like CHANGELOG.md does.
     if not re.search(r"^### \S", metadata["description"], re.M) or not re.search(r"^\* \*\*Discord", metadata["description"], re.M):
@@ -1001,8 +1001,8 @@ def release_metadata():
     metadata = {
         "created_at": created_at,
         "description": release_summary(),
-        "download_url": f"https://github.com/lildanlid1/Cordly/releases/download/{RELEASE_TAG}/{ASSET_NAME}",
-        "page_url": f"https://github.com/lildanlid1/Cordly/releases/tag/{RELEASE_TAG}",
+        "download_url": f"https://github.com/pfn/android-discord-patches/releases/download/{RELEASE_TAG}/{ASSET_NAME}",
+        "page_url": f"https://github.com/pfn/android-discord-patches/releases/tag/{RELEASE_TAG}",
         "signature_download_url": "",
         "version": VERSION,
     }

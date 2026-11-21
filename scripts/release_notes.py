@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CHANGELOG = ROOT / "CHANGELOG.md"
-REPOS = ("https://github.com/YOURNAME/my-discord-patches", "https://github.com/lildanlid1/Cordly", "https://github.com/VenusIsJaded/Venus-Patches")
+REPOS = ("https://github.com/pfn/android-discord-patches", "https://github.com/lildanlid1/Cordly", "https://github.com/VenusIsJaded/Venus-Patches")
 
 # The headings Morphe Manager maps to its own icons and titles, in the order they're written. App support comes
 # first, so the Discord version a release works with is the first thing you read.

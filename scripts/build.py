@@ -894,8 +894,8 @@ def build():
         "Manifest-Version: 1.0", "Name: YOURNAME Discord Patches",
         "Description: Personal Discord feed: Conduit (Hide blocked or ignored messages) plus jrddupont's Hermes patches.",
         f"Version: {VERSION}", "Patcher-Version: 1.15.0",
-        "Source: https://github.com/YOURNAME/my-discord-patches",
-        "Author: YOURNAME; includes patches from lildanlid1/Cordly (GPL-3.0) and jrddupont/discord-patches (GPL-3.0)", "License: GPL-3.0", "", "",
+        "Source: https://github.com/pfn/android-discord-patches",
+        "Author: pfn; includes patches from lildanlid1/Cordly (GPL-3.0) and jrddupont/discord-patches (GPL-3.0)", "License: GPL-3.0", "", "",
     ])
     bundle = libs / ASSET_NAME
     # Normalize ZIP timestamps, order and modes so identical inputs produce identical bundles.

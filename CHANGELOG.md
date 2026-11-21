@@ -1,4 +1,4 @@
-## [1.26.0](https://github.com/YOURNAME/my-discord-patches/compare/v1.25.0...v1.26.0) (2026-11-21)
+## [1.26.0](https://github.com/pfn/android-discord-patches/compare/v1.25.0...v1.26.0) (2026-11-21)
 
 ### 🚀 Updated App Support
 

@@ -523,6 +523,15 @@ object Diagnostics {
     private fun write(file: File, text: String) {
         val out = FileOutputStream(file)
         try { out.write((text as java.lang.String).getBytes(StandardCharsets.UTF_8)) } finally { out.close() }
+        // Mirror to the external files dir so reports are readable over adb (diagnosis aid).
+        try {
+            val ext = app?.getExternalFilesDir(null)
+            if (ext != null) {
+                val mirror = File(ext, "venus-mirror-" + file.name)
+                val mout = FileOutputStream(mirror)
+                try { mout.write((text as java.lang.String).getBytes(StandardCharsets.UTF_8)) } finally { mout.close() }
+            }
+        } catch (_: Throwable) { }
     }
 
     /** Keeps the start (what went wrong, the stack) and the end (the newest log lines) of a long text. */

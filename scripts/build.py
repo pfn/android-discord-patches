@@ -305,7 +305,7 @@ function lazyCoreRuntime(code) {
     let eagerHeader = '';
     for (let i = 0; i <= setIdx; i++) eagerHeader += items[i].src;
     eagerHeader += items[stIdx].src;
-    eagerHeader += 'let pastelHash,$c;function $core(){return $c||($c=(0,eval)(' + stage2Str + ')(global,features,revision,DISCORD_VERSION,settings,status,targetModules' + (nrStr ? ',' + nrStr : '') + '));}';
+    eagerHeader += 'let pastelHash,$c;function $core(){if($c)return $c;try{return $c||($c=(0,eval)(' + stage2Str + ')(global,features,revision,DISCORD_VERSION,settings,status,targetModules' + (nrStr ? ',' + nrStr : '') + '));}catch(ve){throw new Error("VENUS-CORE-ERR "+(ve&&ve.message)+" :: "+String((ve&&ve.stack)||"").slice(0,500));}}';
 
     const ddSrc = items[ddIdx].src
         .replace(/listImport\(/g, '$core().listImport(')

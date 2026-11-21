@@ -99,6 +99,33 @@
       "options": []
     },
     {
+      "name": "Hide blocked or ignored message rows",
+      "description": "Removes the \"blocked messages\" and \"ignored messages\" rows from chat.",
+      "default": true,
+      "category": null,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.discord",
+          "name": "Discord",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#5865F2",
+          "signatures": null,
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Hide blocked or ignored messages",
       "description": "Removes the \"blocked messages\" and \"ignored messages\" rows from chat, and can hide replies to them too. From Rain.",
       "default": true,

@@ -891,7 +891,7 @@ def build():
         "--output", dex, classes)
     # Same JVM classes + classes.dex layout and manifest keys as the official plugin.
     manifest = "\r\n".join([
-        "Manifest-Version: 1.0", "Name: YOURNAME Discord Patches",
+        "Manifest-Version: 1.0", "Name: pfn Discord Patches",
         "Description: Personal Discord feed: Conduit (Hide blocked or ignored messages) plus jrddupont's Hermes patches.",
         f"Version: {VERSION}", "Patcher-Version: 1.15.0",
         "Source: https://github.com/pfn/android-discord-patches",

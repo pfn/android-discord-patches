@@ -33,11 +33,7 @@ Hide blocked or ignored messages). To add more Conduit features later, copy the 
    git push -u origin main --tags
    ```
 
-2. Find and replace `YOURNAME` → your GitHub username and `my-discord-patches` → your repo name in:
-   - `scripts/build.py` (bundle manifest: Name / Source / Author)
-   - `scripts/release_notes.py` (`REPOS` allow-list)
-   - `CHANGELOG.md` (compare link)
-   - this README
+2. Done — metadata already points at `pfn/android-discord-patches` (bundle manifest name, source URLs, `patches-bundle.json`).
 
 3. Tag the release so `patches-list.json` / `patches-bundle.json` exist on a tag and main:
 

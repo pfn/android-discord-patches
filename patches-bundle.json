@@ -1,8 +1,8 @@
 {
-  "created_at": "2026-11-22T01:42:29",
-  "description": "### \ud83d\udc1b Bug Fixes\n\n* **Discord:** Fixed launch crash on Discord 354.12 by shipping a kotlin runtime shim, so Conduit extensions no longer reference the kotlin.jvm.internal classes newer Discord obfuscates away\n",
-  "download_url": "https://github.com/pfn/android-discord-patches/releases/download/v1.27.0/patches-1.27.0.mpp",
-  "page_url": "https://github.com/pfn/android-discord-patches/releases/tag/v1.27.0",
+  "created_at": "2026-11-22T04:33:19",
+  "description": "### \ud83d\udc1b Bug Fixes\n\n* **Discord:** Fixed blocked and ignored messages still rendering on 354.12 by reimplementing Hide blocked or ignored messages as a Hermes bytecode patch - blocked and ignored message groups no longer render at all (no content, no collapsed indicator)\n* **Discord:** Fixed every Conduit JS feature silently failing on 354.12 by removing the Conduit runtime patches (Conduit settings, Conduit button on profile bar, the Conduit hide-blocked flag) - the bridgeless React runtime never registers modules through `global.__d`\n* **Discord:** Fixed the Hermes patches being silently revertible by Discord's downloaded OTA bundles: the loader pin moved into Pin app to built-in bundle, which now works without the Conduit runtime\n",
+  "download_url": "https://github.com/pfn/android-discord-patches/releases/download/v1.28.0/patches-1.28.0.mpp",
+  "page_url": "https://github.com/pfn/android-discord-patches/releases/tag/v1.28.0",
   "signature_download_url": "",
-  "version": "1.27.0"
+  "version": "1.28.0"
 }

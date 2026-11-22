@@ -100,7 +100,7 @@
     },
     {
       "name": "Hide blocked or ignored message rows",
-      "description": "Removes the \"blocked messages\" and \"ignored messages\" rows from chat.",
+      "description": "Hides messages from blocked and ignored users entirely - no content, no divider.",
       "default": true,
       "category": null,
       "dependencies": [],

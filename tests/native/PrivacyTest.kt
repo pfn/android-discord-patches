@@ -74,10 +74,9 @@ fun main(args: Array<String>) {
         selected.forEach { visit(it) }
         return visited.toList()
     }
-    val ordered = graph(listOf(venusSettings))
+    // The manifest is Conduit-free now: pinBuiltInBundlePatch carries the loader pin.
+    val ordered = graph(listOf(app.discord.patches.updater.pinBuiltInBundlePatch))
     check(ordered.count { it === packagedDiscordBundle } == 1)
-    check(ordered.count { it === passkeyErrorHint } == 1)
-    check(ordered.count { it === discordBundleGuard } == 1)
     for ((i, patch) in ordered.withIndex()) check(patch.dependencies.all { ordered.indexOf(it) < i })
     if (args.isEmpty()) {
         // CI can validate output against the same digests without distributing proprietary APK content.

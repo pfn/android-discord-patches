@@ -102,7 +102,9 @@ private object BundleLoader : Fingerprint(
 )
 
 internal val packagedDiscordBundle = bytecodePatch {
-    dependsOn(discordBundleGuard)
+    // No discordBundleGuard here: the pristine-bundle SHA-1 check protected the Conduit privacy
+    // suites (not in this manifest). The loader pin is structural smali, and the Hermes patches
+    // validate the bundle loudly at their own discovery.
     execute {
         val loader = Fingerprint(
             definingClass = "Lcom/facebook/react/bridge/JSBundleLoader;",
@@ -349,15 +351,11 @@ internal val diagnostics = bytecodePatch {
     }
 }
 
-@Suppress("unused")
-val venusSettings = bytecodePatch(
-    name = "Conduit settings",
-    description = "Adds Conduit to Discord's settings, where you turn each feature on or off, in your language. Needed by every feature."
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(runtimeAssets, packagedDiscordBundle, passkeyErrorHint, settingsLanguages, diagnostics)
-}
+// venusSettings ("Conduit settings") and the bundledPlugin feature flags were removed from the
+// manifest: on 354.12 the bridgeless React runtime never registers modules through global.__d,
+// so every Conduit JS feature silently fails (verified - the stream filter, settings UI and
+// profile-bar button never fire). The one live piece, packagedDiscordBundle's loader pin, moved
+// to pinBuiltInBundlePatch. The machinery below stays for 351.11 and for reuse.
 
 
 
@@ -436,17 +434,6 @@ internal fun requireUnpatched(method: app.morphe.patcher.util.proxy.mutableTypes
     } ?: emptyList()
     if (strings.any { it.startsWith(marker) } || calls.any { it.startsWith("Lapp/venus/") })
         throw PatchException("${method.definingClass}->${method.name} already has a Conduit guard; each method may only get one")
-}
-
-// Each feature is its own selectable patch, bundled offline in the Conduit runtime.
-private fun bundledPlugin(key: String, title: String, summary: String) = rawResourcePatch(
-    name = title,
-    description = summary
-) {
-    compatibleWith(discord)
-    section(PLUGINS)
-    dependsOn(venusSettings)
-    execute { additionalSelections += key }
 }
 
 internal const val REPLY_PREVIEW = "Lcom/discord/chat/presentation/message/MessageViewReplyPreview;"
@@ -619,38 +606,6 @@ internal fun readSystemEmojiSetting(method: app.morphe.patcher.util.proxy.mutabl
     if (first?.opcode != com.android.tools.smali.dexlib2.Opcode.INVOKE_SUPER || target != "Landroid/app/Application;->onCreate()V")
         throw PatchException("MainApplication.onCreate no longer starts with super.onCreate()")
     method.addInstructions(1, "invoke-static {p0}, $SYSTEM_EMOJI->init(Landroid/content/Context;)V")
-}
-
-/**
- * The native color swap both Material You colors and Custom themes use: Discord's Android views (the chat list, embeds,
- * the voice overlay, the window) draw with built-in theme colors JS can't reach, so JS sends a Discord color -> new color
- * table through getFileHash and every native color read goes through it. Installed once, whichever patches are selected.
- */
-private val nativeThemeColors = bytecodePatch {
-    dependsOn(venusSettings)
-    extendWith("extensions/monet.mpe")
-    execute {
-        materialYouBridge(Fingerprint(
-            definingClass = FILE_MODULE,
-            name = "getFileHash",
-            returnType = "V",
-            parameters = listOf("Ljava/lang/String;", "Ljava/lang/String;", "D", PROMISE)
-        ).method)
-        materialYouNativeColors(Fingerprint(
-            definingClass = COLOR_UTILS,
-            name = "applySaturationFactor",
-            returnType = "I",
-            parameters = listOf("I")
-        ).method)
-        for ((owner, name, parameters) in MATERIAL_YOU_DIRECT_READS)
-            materialYouDirectColors(Fingerprint(definingClass = owner, name = name, parameters = parameters).method)
-        readMaterialYouColors(Fingerprint(
-            definingClass = "Lcom/discord/MainApplication;",
-            name = "onCreate",
-            returnType = "V",
-            parameters = listOf()
-        ).method)
-    }
 }
 
 internal const val HIGHLIGHT_DRAWER = "Lcom/discord/chat/presentation/message/decorations/HighlightedMessageDrawer;"
@@ -914,9 +869,4 @@ internal fun readHandsfreeContext(method: app.morphe.patcher.util.proxy.mutableT
     method.addInstructions(1, "invoke-static {p0}, $HANDSFREE->init(Landroid/content/Context;)V")
 }
 
-@Suppress("unused")
-val hideBlockedMessages = bundledPlugin("hideBlocked", "Hide blocked or ignored messages",
-    "Removes the \"blocked messages\" and \"ignored messages\" rows from chat, and can hide replies to them too. From Rain.")
-@Suppress("unused")
-val youBarSettings = bundledPlugin("youBarSettings", "Conduit button on profile bar",
-    "A shortcut to Conduit settings, next to the notifications bell.")
+

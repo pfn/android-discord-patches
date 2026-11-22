@@ -1,3 +1,11 @@
+## [1.28.0](https://github.com/pfn/android-discord-patches/compare/v1.27.0...v1.28.0) (2026-11-22)
+
+### 🐛 Bug Fixes
+
+* **Discord:** Fixed blocked and ignored messages still rendering on 354.12 by reimplementing Hide blocked or ignored messages as a Hermes bytecode patch - blocked and ignored message groups no longer render at all (no content, no collapsed indicator)
+* **Discord:** Fixed every Conduit JS feature silently failing on 354.12 by removing the Conduit runtime patches (Conduit settings, Conduit button on profile bar, the Conduit hide-blocked flag) - the bridgeless React runtime never registers modules through `global.__d`
+* **Discord:** Fixed the Hermes patches being silently revertible by Discord's downloaded OTA bundles: the loader pin moved into Pin app to built-in bundle, which now works without the Conduit runtime
+
 ## [1.27.0](https://github.com/pfn/android-discord-patches/compare/v1.26.0...v1.27.0) (2026-11-21)
 
 ### 🐛 Bug Fixes

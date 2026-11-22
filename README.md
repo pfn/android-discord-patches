@@ -39,11 +39,10 @@ Hide blocked or ignored messages). To add more Conduit features later, copy the 
 
    ```sh
    git tag v1.26.0 && git push origin v1.26.0
-```
+   ```
 
 4. Re-run the GitHub Actions workflow (or push again) so a `v1.26.0` release with
    `patches-1.26.0.mpp` exists — `patches-bundle.json` points Manager at that release asset.
-```   ```
 
    Morphe Manager fetches `patches-list.json` from the repo's default branch, so main is enough;
    the tag is for your own bookkeeping. (Cordly's release.yml workflow is not included — this

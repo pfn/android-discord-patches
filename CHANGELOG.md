@@ -1,3 +1,9 @@
+## [1.29.0](https://github.com/pfn/android-discord-patches/compare/v1.28.0...v1.29.0) (2026-11-25)
+
+### 🐛 Bug Fixes
+
+* **Discord:** Fixed "Waiting for network..." latching until force-kill on mobile: armed NetInfo's built-in reachability probe loop (5s retries while unreachable) instead of passively mirroring the OS connectivity flag, so Discord dismisses the disconnected state itself and resumes the gateway and message fetching
+
 ## [1.28.0](https://github.com/pfn/android-discord-patches/compare/v1.27.0...v1.28.0) (2026-11-22)
 
 ### 🐛 Bug Fixes
